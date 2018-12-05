@@ -6,7 +6,9 @@
  * Time: 10:14
  */
 foreach ($_GET as $key => $item) {
-    $params .= '&'.$key . '=' . $item;
+    if($key != 'redirect_uri'){
+        $params .= '&'.$key . '=' . $item;
+    }
 }
 if (empty($_GET['redirect_uri'])) {
     header('Location: https://www.17duu.com');
@@ -14,7 +16,9 @@ if (empty($_GET['redirect_uri'])) {
     if(empty($params)){
         $url = $_GET['redirect_uri'];
     }else{
-        $url = $_GET['redirect_uri'].'?'.$params;
+        $redirectUri = urldecode($_GET['redirect_uri']);
+        $redirectUriArray = explode('?',$redirectUri);
+        $url = $redirectUriArray[0].'?'.$params.'&'.$redirectUriArray[1];
     }
     header('Location:'.$url);
 }
